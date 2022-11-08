@@ -34,9 +34,9 @@ public class EventDto {
 
     @NotNull(groups = Create.class, message = "Event date can't be empty")
     @FutureShift.List({
-            @FutureShift(groups=Create.class, shiftHours = 1,
+            @FutureShift(groups = Create.class, shiftHours = 1,
                     message = "The time of the event should be no earlier than an hour from the now"),
-            @FutureShift(groups=Update.class, shiftHours = 2,
+            @FutureShift(groups = Update.class, shiftHours = 2,
                     message = "The time of the event should be no earlier than 2 hours from the now")
     })
     LocalDateTime eventDate;

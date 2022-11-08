@@ -28,6 +28,7 @@ public class CompilationService {
                 () -> new NotFoundException(String.format("Compilation with id=%s not found", compId))
         );
     }
+
     public CompilationDto createCompilation(NewCompilationDto compilationDto) {
         final Compilation compilation = CompilationMapper.fromCompilationDto(compilationDto,
                 eventRepository.findAllById(compilationDto.getEvents()));

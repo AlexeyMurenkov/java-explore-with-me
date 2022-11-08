@@ -12,7 +12,7 @@ public class UserMapper {
         return User.of(userDto.getId(), userDto.getEmail(), userDto.getName());
     }
 
-    public static Collection<UserDto> toUsersDto (Collection<User> users) {
+    public static Collection<UserDto> toUsersDto(Collection<User> users) {
         return users.stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 }

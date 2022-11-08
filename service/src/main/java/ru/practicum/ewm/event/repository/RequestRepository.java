@@ -10,7 +10,10 @@ import java.util.Collection;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
     Collection<Request> findAllByEvent(Event event);
+
     int countByEventAndStatus(Event event, RequestStatus status);
+
     Collection<Request> findAllByEventAndStatus(Event event, RequestStatus status);
+
     Collection<Request> findAllByRequester(User requester);
 }
