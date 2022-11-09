@@ -24,12 +24,14 @@ public class AdminEventController {
     EventService eventService;
 
     @GetMapping
-    public Collection<EventGetDto> getEvents(@RequestParam Long[] users,
-                                             @RequestParam EventState[] states,
-                                             @RequestParam Long[] categories,
-                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Collection<EventGetDto> getEvents(@RequestParam(required = false) Long[] users,
+                                             @RequestParam(required = false) EventState[] states,
+                                             @RequestParam(required = false) Long[] categories,
+                                             @RequestParam(required = false)
+                                                 @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                  Optional<LocalDateTime> rangeStart,
-                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                             @RequestParam(required = false)
+                                                 @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                  Optional<LocalDateTime> rangeEnd,
                                              @RequestParam(defaultValue = "0") int from,
                                              @RequestParam(defaultValue = "10") int size) {

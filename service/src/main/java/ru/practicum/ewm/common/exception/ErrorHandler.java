@@ -4,10 +4,12 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.ServletException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -26,12 +28,23 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleForbiddenException(ServletException e) {
+        return ApiError.of(
+                e.getMessage(),
+                "For the requested operation the conditions are not met.",
+                HttpStatus.BAD_REQUEST.name(),
+                Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ApiError.of(
                 e.getFieldError() != null ? e.getFieldError().getDefaultMessage() : e.getMessage(),
                 "For the requested operation the conditions are not met.",
-                HttpStatus.FORBIDDEN.name(),
+                HttpStatus.BAD_REQUEST.name(),
                 Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
         );
     }

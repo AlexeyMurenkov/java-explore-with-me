@@ -33,7 +33,8 @@ public class PublicEventController {
                                                  Optional<LocalDateTime> rangeStart,
                                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                  Optional<LocalDateTime> rangeEnd,
-                                             @RequestParam boolean onlyAvailable, @RequestParam Optional<EventSort> sort,
+                                             @RequestParam(defaultValue = "false") boolean onlyAvailable,
+                                             @RequestParam Optional<EventSort> sort,
                                              @RequestParam(defaultValue = "0") int from,
                                              @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
         statsClient.save(EndpointHit.of("ewm", request.getRequestURI(), request.getRemoteAddr()));

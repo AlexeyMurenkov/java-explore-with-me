@@ -239,13 +239,13 @@ public class EventService {
         BooleanBuilder filter = new BooleanBuilder(QEvent.event.eventDate.after(rangeStart.orElse(LocalDateTime.MIN))
                         .and(QEvent.event.eventDate.before(rangeEnd.orElse(LocalDateTime.MAX)))
         );
-        if (userIds.length > 0) {
+        if (userIds != null && userIds.length > 0) {
             filter.and(QEvent.event.initiator.id.in(userIds));
         }
-        if (states.length > 0) {
+        if (states != null && states.length > 0) {
             filter.and(QEvent.event.state.in(states));
         }
-        if (catIds.length > 0) {
+        if (catIds != null && catIds.length > 0) {
             filter.and(QEvent.event.category.id.in(catIds));
         }
 
