@@ -36,12 +36,16 @@ public class StatsClient {
 
     public EndpointHit[] get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean uniq) {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return restTemplate.getForEntity(
-                "/stats?start={start}&end={end}&uris={uris}&unique={unique}", EndpointHit[].class,
-                start.format(formatter),
-                end.format(formatter),
-                String.join(",", uris),
-                uniq).getBody();
+        try {
+            return restTemplate.getForEntity(
+                    "/stats?start={start}&end={end}&uris={uris}&unique={unique}", EndpointHit[].class,
+                    start.format(formatter),
+                    end.format(formatter),
+                    String.join(",", uris),
+                    uniq).getBody();
+        } catch (RuntimeException e) {
+            return new EndpointHit[0];
+        }
     }
 
     public EndpointHit[] get(LocalDateTime start, LocalDateTime end, List<String> uris) {
