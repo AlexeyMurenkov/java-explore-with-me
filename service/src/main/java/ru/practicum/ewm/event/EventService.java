@@ -143,9 +143,6 @@ public class EventService {
 
     public EventGetDto cancelEventByIdAndUserId(long eventId, long userId) {
         final Event event = findUserEvent(userId, eventId);
-        if (!event.isRequestModeration()) {
-            throw new ForbiddenException("Only request moderation events can be canceled");
-        }
         event.setState(EventState.CANCELED);
         final int confirmedRequests = requestRepository.countByEventAndStatus(event, RequestStatus.CONFIRMED);
         return EventMapper.toEventFullDto(eventRepository.save(event), confirmedRequests, getViews(event));
