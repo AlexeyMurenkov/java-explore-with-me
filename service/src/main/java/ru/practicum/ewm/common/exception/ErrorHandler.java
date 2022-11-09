@@ -15,20 +15,9 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler({HttpMessageConversionException.class, ServletException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleHttpMessageConversionException(HttpMessageConversionException e) {
-        return ApiError.of(
-                e.getMessage(),
-                "For the requested operation the conditions are not met.",
-                HttpStatus.BAD_REQUEST.name(),
-                Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
-        );
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleForbiddenException(ServletException e) {
+    public ApiError handleHttpMessageConversionException(Exception e) {
         return ApiError.of(
                 e.getMessage(),
                 "For the requested operation the conditions are not met.",
