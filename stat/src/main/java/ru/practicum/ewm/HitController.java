@@ -3,6 +3,7 @@ package ru.practicum.ewm;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.EndpointHit;
@@ -11,6 +12,7 @@ import ru.practicum.ewm.dto.ViewStats;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+@Slf4j
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class HitController {
 
     @PostMapping("/hit")
     public void createHit(@RequestBody EndpointHit hit) {
+        log.debug("POST to create hit {}", hit);
         hitService.create(hit);
     }
 
@@ -30,6 +33,7 @@ public class HitController {
                                               LocalDateTime end,
                                           @RequestParam(required = false) String[] uris,
                                           @RequestParam(defaultValue = "false") boolean uniq) {
+        log.debug("GET stats for uris {} from {} to {}", uris, start, end);
         return hitService.getStat(start, end, uris, uniq);
     }
 }
