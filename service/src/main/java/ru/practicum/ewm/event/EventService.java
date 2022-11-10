@@ -36,6 +36,10 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class EventService {
+
+    private static final LocalDateTime MIN_DATE_TIME = LocalDateTime.of(2000, 1, 1, 0, 0);
+    private static final LocalDateTime MAX_DATE_TIME = LocalDateTime.of(2099, 12, 31, 23, 59);
+
     EventRepository eventRepository;
     UserRepository userRepository;
     CategoryRepository categoryRepository;
@@ -233,8 +237,8 @@ public class EventService {
 
         final Pageable pageable = FromIndexPageRequest.of(from, size);
 
-        BooleanBuilder filter = new BooleanBuilder(QEvent.event.eventDate.after(rangeStart.orElse(LocalDateTime.MIN))
-                        .and(QEvent.event.eventDate.before(rangeEnd.orElse(LocalDateTime.MAX)))
+        BooleanBuilder filter = new BooleanBuilder(QEvent.event.eventDate.after(rangeStart.orElse(MIN_DATE_TIME))
+                        .and(QEvent.event.eventDate.before(rangeEnd.orElse(MAX_DATE_TIME)))
         );
         if (userIds != null && userIds.length > 0) {
             filter.and(QEvent.event.initiator.id.in(userIds));
@@ -288,8 +292,8 @@ public class EventService {
                                        Optional<LocalDateTime> rangeStart, Optional<LocalDateTime> rangeEnd,
                                        boolean onlyAvailable, Optional<EventSort> sort, int from, int size) {
 
-        BooleanBuilder filter = new BooleanBuilder(QEvent.event.eventDate.after(rangeStart.orElse(LocalDateTime.MIN))
-                .and(QEvent.event.eventDate.before(rangeEnd.orElse(LocalDateTime.MAX)))
+        BooleanBuilder filter = new BooleanBuilder(QEvent.event.eventDate.after(rangeStart.orElse(MIN_DATE_TIME))
+                .and(QEvent.event.eventDate.before(rangeEnd.orElse(MAX_DATE_TIME)))
         );
 
         if (text.isPresent()) {
