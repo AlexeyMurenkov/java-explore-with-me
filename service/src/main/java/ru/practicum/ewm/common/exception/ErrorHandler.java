@@ -14,9 +14,8 @@ import java.util.Collections;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(
-            {HttpMessageConversionException.class, ServletException.class, MethodArgumentNotValidException.class}
-    )
+    @ExceptionHandler({HttpMessageConversionException.class, ServletException.class,
+            MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleHttpMessageConversionException(Exception e) {
         return ApiError.of(
