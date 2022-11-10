@@ -9,31 +9,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.ServletException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler({HttpMessageConversionException.class, ServletException.class})
+    @ExceptionHandler(
+            {HttpMessageConversionException.class, ServletException.class, MethodArgumentNotValidException.class}
+    )
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleHttpMessageConversionException(Exception e) {
         return ApiError.of(
                 e.getMessage(),
                 "For the requested operation the conditions are not met.",
                 HttpStatus.BAD_REQUEST.name(),
-                Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
-        );
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return ApiError.of(
-                e.getFieldError() != null ? e.getFieldError().getDefaultMessage() : e.getMessage(),
-                "For the requested operation the conditions are not met.",
-                HttpStatus.BAD_REQUEST.name(),
-                Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+                Collections.emptyList()
         );
     }
 
@@ -44,7 +34,7 @@ public class ErrorHandler {
                 e.getMessage(),
                 "For the requested operation the conditions are not met.",
                 HttpStatus.FORBIDDEN.name(),
-                Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+                Collections.emptyList()
         );
     }
 
@@ -55,7 +45,7 @@ public class ErrorHandler {
                 e.getMessage(),
                 "The required object was not found.",
                 HttpStatus.NOT_FOUND.name(),
-                Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+                Collections.emptyList()
         );
     }
 
@@ -66,7 +56,7 @@ public class ErrorHandler {
                 e.getCause().getMessage(),
                 "Integrity constraint has been violated",
                 HttpStatus.CONFLICT.name(),
-                Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+                Collections.emptyList()
         );
     }
 
@@ -77,7 +67,7 @@ public class ErrorHandler {
                 e.getMessage(),
                 "Error occurred",
                 HttpStatus.INTERNAL_SERVER_ERROR.name(),
-                Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.toList())
+                Collections.emptyList()
         );
     }
 }
