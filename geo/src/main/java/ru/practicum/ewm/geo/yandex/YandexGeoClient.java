@@ -46,7 +46,8 @@ public class YandexGeoClient implements GeoClient {
 
     private YandexGeoDto get(String geocode) {
         final ResponseEntity<YandexGeoDto> response = restTemplate.getForEntity(
-                "/1.x/?format=json&results=1&apikey={apikey}&geocode={geocode}", YandexGeoDto.class, apikey, geocode);
+                "/1.x/?format=json&results=1&sco=latlong&apikey={apikey}&geocode={geocode}", YandexGeoDto.class,
+                apikey, geocode);
         return response.getBody();
     }
 
