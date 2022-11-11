@@ -26,6 +26,7 @@
 		<module>common</module>
 		<module>service</module>
 		<module>stat</module>
+        <module>geo</module>
     </modules>
 
 	<dependencyManagement>

@@ -1,5 +1,28 @@
 version: '3.8'
 services:
+  geo-service:
+    build: ./geo
+    container_name: geo-service
+    ports:
+      - "9191:9191"
+    depends_on:
+      - geo-db
+    environment:
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://geo-db:5432/geo
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+
+  geo-db:
+    image: postgres:14-alpine
+    container_name: geo-db
+    ports:
+      - "6543:5432"
+    environment:
+      - POSTGRES_DB=geo
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+
   stats-server:
     build: ./stat
     container_name: stats-server
@@ -12,6 +35,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - YANDEX_GEO_URL=https://geocode-maps.yandex.ru
+      - YANDEX_GEO_APIKEY=bd362e6e-367d-4eef-aa7a-4bda4041c396
 
   stats-db:
     image: postgres:14-alpine
@@ -23,7 +48,6 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
-
   ewm-service:
     build: ./service
     container_name: ewm-service
@@ -32,8 +56,10 @@ services:
     depends_on:
       - ewm-db
       - stats-server
+      - geo-service
     environment:
       - PROP_STATS_URL=http://stats-server:9090
+      - PROP_GEO_URL=http://geo-service:9191
       - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/explorewithme
       - SPRING_DATASOURCE_USERNAME=root
