@@ -2,6 +2,7 @@ package ru.practicum.ewm.event.dto;
 
 import ru.practicum.ewm.category.Category;
 import ru.practicum.ewm.category.CategoryMapper;
+import ru.practicum.ewm.dto.Location;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.user.User;
 import ru.practicum.ewm.user.UserMapper;
@@ -38,7 +39,7 @@ public class EventMapper {
                 .description(event.getDescription())
                 .eventDate(event.getEventDate())
                 .initiator(UserMapper.toUserDto(event.getInitiator()))
-                .location(Location.of(event.getLat(), event.getLon()))
+                .location(Location.of(null, event.getLat(), event.getLon()))
                 .paid(event.isPaid())
                 .participantLimit(event.getParticipantLimit())
                 .publishedOn(event.getPublishedOn())

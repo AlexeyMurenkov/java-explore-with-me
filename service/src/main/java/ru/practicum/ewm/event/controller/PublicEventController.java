@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.common.StatsClient;
+import ru.practicum.ewm.common.geo.GeoClientPatcher;
 import ru.practicum.ewm.event.EventService;
 import ru.practicum.ewm.event.EventSort;
 import ru.practicum.ewm.event.dto.EventGetDto;
@@ -17,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -27,6 +29,7 @@ public class PublicEventController {
 
     EventService eventService;
     StatsClient statsClient;
+    GeoClientPatcher geoClientPatcher;
 
     @GetMapping
     public Collection<EventGetDto> getEvents(@RequestParam Optional<String> text, @RequestParam Long[] categories,
@@ -42,13 +45,13 @@ public class PublicEventController {
         log.debug("GET request for filters events");
         statsClient.save(EndpointHit.of("ewm", request.getRequestURI(), request.getRemoteAddr()));
         return eventService.getEventsByPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from,
-                size);
+                size).stream().map(geoClientPatcher::patchEventGetDto).collect(Collectors.toList());
     }
 
     @GetMapping("/{eid}")
     public EventGetDto getEvent(@PathVariable @NotNull Long eid, HttpServletRequest request) {
         statsClient.save(EndpointHit.of("ewm", request.getRequestURI(), request.getRemoteAddr()));
         log.debug("GET request for event eventId={}", eid);
-        return eventService.getEventByPublic(eid);
+        return geoClientPatcher.patchEventGetDto(eventService.getEventByPublic(eid));
     }
 }

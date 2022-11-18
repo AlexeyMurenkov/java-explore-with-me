@@ -1,10 +1,12 @@
 package ru.practicum.ewm.event.dto;
 
 import lombok.Value;
+import lombok.With;
 import ru.practicum.ewm.common.validation.annotation.FutureShift;
 import ru.practicum.ewm.common.validation.annotation.NotBlankIfNotNull;
 import ru.practicum.ewm.common.validation.group.Create;
 import ru.practicum.ewm.common.validation.group.Update;
+import ru.practicum.ewm.dto.Location;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -42,6 +44,7 @@ public class EventDto {
     LocalDateTime eventDate;
 
     @NotNull(groups = Create.class, message = "Event location can't be empty")
+    @With
     Location location;
 
     Boolean paid;
